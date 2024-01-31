@@ -6,26 +6,26 @@ class SetBuilder extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        pieces: []
+        textValue: "",
     }
+
+    this.textChange = this.textChange.bind(this)
   }
 
-  componentDidMount() {
-    axios.get('http://127.0.0.1:5000/api/piecelist').then(res => {
-      this.setState({
-        pieces: res.data
-      })
+
+  textChange = (event) => {
+    this.setState({
+      textValue: event.target.value,
     })
   }
 
   render() {
+    console.log(this.state.pieces)
     return (
         <>
-            <input className='legoSearch' placeholder='Enter a piece'></input>
+            <input className='legoSearch' placeholder='Enter a piece' onChange={this.textChange}></input>
             <ul className='pieceList'>
-                {this.state.pieces.map(piece => {
-                return <li>{piece.id}</li>
-                })}
+
             </ul>
         </>
     );

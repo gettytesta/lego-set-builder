@@ -5,7 +5,9 @@ import json
 
 
 REBRICK_KEY = os.getenv('REBRICK_KEY')
+REBRICK_KEY = "1eece07086fadf00e97b797f1289bd34"
 MONGO_CONNECTION_STRING = os.getenv('MONGO_CONNECTION_STRING')
+MONGO_CONNECTION_STRING = "mongodb+srv://GTestaMoney:NvoW1dGD9BdxUE14@legosets.8lnejno.mongodb.net/?retryWrites=true&w=majority"
 
 def get_database():
    client = MongoClient(MONGO_CONNECTION_STRING)
@@ -59,14 +61,14 @@ def make_setlist():
     for set in sets:
         setinfo = rebrick.lego.get_set(set)
         parsedSet = json.loads(setinfo.read())
-        setlist.insert_one({'_id': set, 'num_parts': parsedSet['num_parts'], 'collected_pieces': 0})
+        #setlist.insert_one({'_id': set, 'num_parts': parsedSet['num_parts'], 'collected_pieces': 0})
+        setlist.update_one({'_id': set}, {'$set': {'set_name': parsedSet['name']}})
 
 def get_setlist():
     newSetList = LegoSets["setlist"].find({})
     retSetList = []
     for set in newSetList:
         retSetList.append({'_id': set['_id'], 'num_parts': set['num_parts'], 'collected_pieces': set['collected_pieces']})
-
     return retSetList
 
-
+make_setlist()

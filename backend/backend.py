@@ -20,5 +20,6 @@ def get_setlist():
     setlist = builder.get_setlist()
     return setlist
 
+
 if __name__ == "__main__":
     app.run(debug=True)
