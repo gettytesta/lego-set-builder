@@ -36,7 +36,7 @@ class App extends React.Component {
         <header className="body">
           <td className='header'>
             <h1>Lego Set Builder V1.0</h1>
-            <button className='menuButton' onClick={this.open_SetBuilder}>Build a Set</button>
+            <button className='menuButton' onClick={this.open_SetBuilder}>Build Sets</button>
             <button className='menuButton' onClick={this.open_SetList}>Check Setlist</button>
           </td>
           {this.state.pageBody}

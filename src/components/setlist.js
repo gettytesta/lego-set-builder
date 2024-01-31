@@ -22,7 +22,7 @@ class SetList extends React.Component {
     return (
         <ul className='pieceList'>
             {this.state.setList.map(set => {
-              return <li>{"SetName: " + set.set_name + " ----- SetNum: " + set._id + " ----- Total Parts: " + set.num_parts + " ----- Collected Parts: " + set.collected_pieces}</li>
+              return <li>{"Name: " + set.set_name + " ----- SetNum: " + set._id + " ----- Total Parts: " + set.num_parts + " ----- Collected Parts: " + set.collected_pieces}</li>
             })}
         </ul>
     );

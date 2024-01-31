@@ -10,16 +10,24 @@ cors = CORS(app)
 def index():
     return "backend"
 
+# Gets the piecelist for a set
 @app.route('/api/piecelist', methods=['GET'])
 def get_piecelist():
     pieces = builder.get_set_elements(2505)
     return pieces
 
+# Gets the user's setlist
 @app.route('/api/user/setlist', methods=['GET'])
 def get_setlist():
     setlist = builder.get_setlist()
     return setlist
 
+# Checks if a piece is needed in any of the users's sets.
+@app.route('/api/check_piece', methods=['POST'])
+def check_piece():
+    part_num = request.json['part_num']
+    setList = builder.search_sets_for_piece(part_num)
+    return setList
 
 if __name__ == "__main__":
     app.run(debug=True)

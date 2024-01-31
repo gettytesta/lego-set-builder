@@ -16,6 +16,8 @@ def get_database():
 LegoSets = get_database()
 rebrick.init(REBRICK_KEY)
 
+collection_names = LegoSets.list_collection_names()
+
 setList = LegoSets["setlist"]
 
 sets = [4774,8061,8075,9461,9462,9463,2258,2260,2505,2516,2519,9441,8960,8961,
@@ -28,6 +30,22 @@ def get_set_elements(set_num):
     parts = rebrick.lego.get_set_elements(set_num)
     parsedParts = json.loads(parts.read())['results']
     return parsedParts
+
+# Search through users sets to see if a piece is needed.
+# Returns a list of sets where the piece is needed.
+def search_sets_for_piece(part_num):
+    retSets = []
+    for col_name in collection_names:
+        if col_name == "setlist":
+            continue
+        currentSet = LegoSets[col_name]
+        for piece in currentSet.find():
+            if part_num == piece['part_num']:
+                if piece['quantity'] > piece['obtained_pieces']:
+                    setData = setList.find_one({'_id': int(col_name)})
+                    retSets.append(setData)
+    return retSets
+                    
 
 # Search through the user's list of sets, and determine if a given piece is needed.
 def search_piece(part_num, color):
@@ -48,6 +66,12 @@ def found_piece(id, set):
     for piece in currentSet.find():
         if id == piece['_id']:
             currentSet.update_one({'_id': id}, {'$inc': {'obtained_pieces': 1}})
+
+
+
+
+
+
 
 # Add a set into the db
 def add_set(set):
@@ -80,5 +104,5 @@ def get_setlist():
     newSetList = LegoSets["setlist"].find({})
     retSetList = []
     for set in newSetList:
-        retSetList.append({'_id': set['_id'], 'num_parts': set['num_parts'], 'collected_pieces': set['collected_pieces']})
+        retSetList.append({'_id': set['_id'], 'num_parts': set['num_parts'], 'collected_pieces': set['collected_pieces'], 'set_name':set['set_name']})
     return retSetList
