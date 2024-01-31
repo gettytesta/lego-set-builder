@@ -63,6 +63,8 @@ def add_set(set):
 def remove_set(set):
     setCluster = LegoSets[str(set)]
     setCluster.drop()
+    setList = LegoSets["setlist"]
+    setList.find_one_and_delete({'_id': set})
 
 # Make the setlist from a defined list of user sets
 def make_setlist():
