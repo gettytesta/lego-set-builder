@@ -7,11 +7,13 @@ class SetBuilder extends React.Component {
     super(props)
     this.state = {
         textValue: "",
-        setList: []
+        setList: [],
+        searchedPart: "",
     }
 
     this.textChange = this.textChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.addPiece = this.addPiece.bind(this)
   }
 
 
@@ -23,6 +25,9 @@ class SetBuilder extends React.Component {
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
+        this.setState({
+          searchedPart: this.state.textValue
+        })
         this.search(this.state.textValue); 
     }
   }
@@ -37,14 +42,26 @@ class SetBuilder extends React.Component {
     }
   }
 
+  addPiece = (part, set) => {
+    axios.post('http://127.0.0.1:5000/api/found_piece', {'part_num': part, 'set_num': set}).then((res) => {
+      document.getElementById('legoSearchBrick').value = ''
+      this.setState({
+        setList: [],
+        textValue: "",
+      })
+    })
+  }
+
   render() {
     return (
         <>
-            <input className='legoSearch' placeholder='Enter a piece' onChange={this.textChange}
+            <input id='legoSearchBrick' className='legoSearch' placeholder='Enter a piece' onChange={this.textChange}
                    onKeyUp={this.handleKeyPress}></input>
             <ul className='pieceList'>
+              {/* {this.state.setList.length === 0 ? <li>Piece not contained in any sets...</li> : <></>} */}
               {this.state.setList.map(set => {
-                return <li>{"Name: " + set.set_name + " ----- SetNum: " + set._id + " ----- Total Parts: " + set.num_parts + " ----- Collected Parts: " + set.collected_pieces}</li>
+                return <li><a href='#' onClick={() => {this.addPiece(this.state.searchedPart, set._id)}}>{set.set_name}</a>
+                {" ----- SetNum: " + set._id + " ----- Total: " + set.quantity + " ----- Collected: " + set.obtained_pieces}</li>
               })}
             </ul>
         </>

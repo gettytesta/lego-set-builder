@@ -29,5 +29,13 @@ def check_piece():
     setList = builder.search_sets_for_piece(part_num)
     return setList
 
+# Adds a part to a users set
+@app.route('/api/found_piece', methods=['POST'])
+def found_piece():
+    part_num = request.json['part_num']
+    set_num = request.json['set_num']
+    builder.found_piece(part_num, set_num)
+    return "Piece added"
+
 if __name__ == "__main__":
     app.run(debug=True)

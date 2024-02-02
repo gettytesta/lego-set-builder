@@ -43,31 +43,17 @@ def search_sets_for_piece(part_num):
             if part_num == piece['part_num']:
                 if piece['quantity'] > piece['obtained_pieces']:
                     setData = setList.find_one({'_id': int(col_name)})
+                    setData['quantity'] = piece['quantity']
+                    setData['obtained_pieces'] = piece['obtained_pieces']
                     retSets.append(setData)
     return retSets
-                    
 
-# Search through the user's list of sets, and determine if a given piece is needed.
-def search_piece(part_num, color):
-    for set in sets:
-        currentSet = LegoSets[str(set)]
-        for piece in currentSet.find():
-            if part_num == piece['part_num'] and color == piece['color']:
-                if piece['quantity'] != piece['obtained_pieces']:
-                    res = input(f"Place in {set} pile, press 'Enter' to continue or 'x' to cancel... ")
-                    if res != 'x':
-                        found_piece(piece['_id'], set)
-                        return 1
-                    return 0
 
 # Add piece to db if found
 def found_piece(id, set):
     currentSet = LegoSets[str(set)]
-    for piece in currentSet.find():
-        if id == piece['_id']:
-            currentSet.update_one({'_id': id}, {'$inc': {'obtained_pieces': 1}})
-
-
+    currentSet.update_one({'part_num': id}, {'$inc': {'obtained_pieces': 1}})
+    return
 
 
 
