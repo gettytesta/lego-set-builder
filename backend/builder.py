@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from urllib.error import HTTPError
 import rebrick
 import os
 import json
@@ -48,6 +49,10 @@ def search_sets_for_piece(part_num):
                     retSets.append(setData)
     return retSets
 
+# Check to see if part is unique to a set
+def search_potentialsets(part_num):
+    sets = rebrick.lego.get_part_color_sets
+
 # Add piece to db if found
 def found_piece(id, set):
     currentSet = LegoSets[str(set)]
@@ -64,8 +69,13 @@ def set_lookup(set):
         retPieces.append(piece)
     return retPieces
         
-
-
+# Get the user's potential set list
+def get_potentialsets():
+    potentialSets = LegoSets['potential_setlist']
+    retSetlist = []
+    for pset in potentialSets.find():
+        retSetlist.append(pset)
+    return retSetlist
 
 # Add a set into the db
 def add_set(set):
@@ -100,3 +110,15 @@ def get_setlist():
     for set in newSetList:
         retSetList.append({'_id': set['_id'], 'num_parts': set['num_parts'], 'collected_pieces': set['collected_pieces'], 'set_name':set['set_name']})
     return retSetList
+
+# Check if a set exists, and return it if so
+def checkIfSetExists(set):
+    try:
+        setdata = rebrick.lego.get_set(set)
+        parsedSet = json.loads(setdata.read())
+        return parsedSet
+    except HTTPError as err:
+        if err.code == 404:
+            return {}
+    
+

@@ -22,17 +22,33 @@ def get_setlist():
     setlist = builder.get_setlist()
     return setlist
 
+# Find if a set exists and returns info if it does
+@app.route('/api/find_set', methods=['POST'])
+def find_set():
+    set_num = request.json['set_num']
+    setdata = builder.checkIfSetExists(set_num)
+    return setdata
+
+# Get info about a user's set
 @app.route('/api/user/set', methods=['POST'])
 def get_setdata():
     set = request.json['set']
     setData = builder.set_lookup(set)
     return setData
 
+# Get the user's potential sets 
+@app.route('/api/user/potentialsets', methods=['GET'])
+def get_potsets():
+    potsetlist = builder.get_potentialsets()
+    return potsetlist
+
 # Checks if a piece is needed in any of the users's sets.
 @app.route('/api/check_piece', methods=['POST'])
 def check_piece():
     part_num = request.json['part_num']
     setList = builder.search_sets_for_piece(part_num)
+    if len(setList) == 0:
+        builder.search_potentialsets(part_num)
     return setList
 
 # Adds a part to a users set

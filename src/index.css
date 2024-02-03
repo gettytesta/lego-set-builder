@@ -36,6 +36,28 @@ code {
   width: 300px;
 }
 
+.colorMenuTop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.colorMenu {
+  height: 40px;
+  width: 300px;
+  margin: 10px;
+  margin-bottom: 0;
+}
+
 .pieceList {
   list-style-type: none;
+}
+
+.pieceIndiv {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+.pieceIndiv2 {
+  margin-top: 0px;
+  padding-top: 0px;
 }

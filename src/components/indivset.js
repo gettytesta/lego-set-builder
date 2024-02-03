@@ -25,7 +25,11 @@ class IndivSet extends React.Component {
                 this.props.set.num_parts + " ----- Collected Parts: " + this.props.set.collected_pieces}</h4>
             <ul className='pieceList'>
                 {this.state.pieces.map(piece => {
-                return <li>{piece.name}: {piece.part_num} ----- {piece.color} ----- Total: {piece.quantity} ----- Collected: {piece.obtained_pieces}</li>
+                // return <li>{piece.name}: {piece.part_num} ----- {piece.color} ----- Total: {piece.quantity} ----- Collected: {piece.obtained_pieces}</li>
+                return <li> 
+                    <p className='pieceIndiv'>{piece.name}: {piece.part_num} ----- {piece.color}</p>
+                    <p className='pieceIndiv2'>Total: {piece.quantity} ----- Collected: {piece.obtained_pieces}</p>
+                </li>
                 })}
             </ul>
         </>

@@ -2,6 +2,7 @@ import React from 'react';
 import SetList from './components/setlist';
 import SetBuilder from './components/setbuilder';
 import IndivSet from './components/indivset';
+import AddSet from './components/addset';
 
 
 class App extends React.Component {
@@ -38,15 +39,23 @@ class App extends React.Component {
     })
   }
 
+  open_AddSet = () => {
+    this.setState({
+      pageState: 3,
+      pageBody: <AddSet />
+    })
+  }
+
 
   render() {
     return (
       <div className="main">
         <header className="body">
           <td className='header'>
-            <h1>Lego Set Builder V1.0</h1>
+            <h1>Lego Set Rebuilder V1.0</h1>
             <button className='menuButton' onClick={this.open_SetBuilder}>Build Sets</button>
             <button className='menuButton' onClick={this.open_SetList}>Check Setlist</button>
+            <button className='menuButton' onClick={this.open_AddSet}>Add Sets</button>
           </td>
           {this.state.pageBody}
         </header>
