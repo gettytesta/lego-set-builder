@@ -61,7 +61,7 @@ class SetBuilder extends React.Component {
               {/* {this.state.setList.length === 0 ? <li>Piece not contained in any sets...</li> : <></>} */}
               {this.state.setList.map(set => {
                 return <li><a href='#' onClick={() => {this.addPiece(this.state.searchedPart, set._id)}}>{set.set_name}</a>
-                {" ----- SetNum: " + set._id + " ----- Total: " + set.quantity + " ----- Collected: " + set.obtained_pieces}</li>
+                {": " + set._id + " ----- Total: " + set.quantity + " ----- Collected: " + set.obtained_pieces}</li>
               })}
             </ul>
         </>

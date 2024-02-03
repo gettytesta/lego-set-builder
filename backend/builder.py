@@ -48,14 +48,22 @@ def search_sets_for_piece(part_num):
                     retSets.append(setData)
     return retSets
 
-
 # Add piece to db if found
 def found_piece(id, set):
     currentSet = LegoSets[str(set)]
     currentSet.update_one({'part_num': id}, {'$inc': {'obtained_pieces': 1}})
+    setList.find_one_and_update({'_id': set}, {'$inc': {'collected_pieces': 1}})
     return
 
-
+# Get the user's set data
+def set_lookup(set):
+    currentSet = LegoSets[str(set)]
+    retPieces = []
+    pieces = currentSet.find()
+    for piece in pieces:
+        retPieces.append(piece)
+    return retPieces
+        
 
 
 

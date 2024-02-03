@@ -22,7 +22,8 @@ class SetList extends React.Component {
     return (
         <ul className='pieceList'>
             {this.state.setList.map(set => {
-              return <li>{set.set_name + ": " + set._id + " ----- Total Parts: " + set.num_parts + " ----- Collected Parts: " + set.collected_pieces}</li>
+              return <li><a href='#' onClick={() => {this.props.openSet(set)}}>{set.set_name}</a>
+                  {": " + set._id + " ----- Total Parts: " + set.num_parts + " ----- Collected Parts: " + set.collected_pieces}</li>
             })}
         </ul>
     );

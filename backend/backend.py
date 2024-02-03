@@ -22,6 +22,12 @@ def get_setlist():
     setlist = builder.get_setlist()
     return setlist
 
+@app.route('/api/user/set', methods=['POST'])
+def get_setdata():
+    set = request.json['set']
+    setData = builder.set_lookup(set)
+    return setData
+
 # Checks if a piece is needed in any of the users's sets.
 @app.route('/api/check_piece', methods=['POST'])
 def check_piece():

@@ -1,6 +1,7 @@
 import React from 'react';
 import SetList from './components/setlist';
 import SetBuilder from './components/setbuilder';
+import IndivSet from './components/indivset';
 
 
 class App extends React.Component {
@@ -13,6 +14,7 @@ class App extends React.Component {
 
     this.open_SetBuilder = this.open_SetBuilder.bind(this)
     this.open_SetList = this.open_SetList.bind(this)
+    this.open_IndivSet = this.open_IndivSet.bind(this)
   }
 
   open_SetBuilder = () => {
@@ -25,7 +27,14 @@ class App extends React.Component {
   open_SetList = () => {
     this.setState({
       pageState: 1,
-      pageBody: <SetList />
+      pageBody: <SetList openSet={this.open_IndivSet}/>
+    })
+  }
+
+  open_IndivSet = (set) => {
+    this.setState({
+      pageState: 2,
+      pageBody: <IndivSet set={set}/>
     })
   }
 
