@@ -34,23 +34,40 @@ def get_set_elements(set_num):
 
 # Search through users sets to see if a piece is needed.
 # Returns a list of sets where the piece is needed.
-def search_sets_for_piece(part_num):
+def search_sets_for_piece(part_num, color_num):
     retSets = []
-    for col_name in collection_names:
-        if col_name == "setlist":
-            continue
-        currentSet = LegoSets[col_name]
-        for piece in currentSet.find():
-            if part_num == piece['part_num']:
-                if piece['quantity'] > piece['obtained_pieces']:
-                    setData = setList.find_one({'_id': int(col_name)})
-                    setData['quantity'] = piece['quantity']
-                    setData['obtained_pieces'] = piece['obtained_pieces']
-                    retSets.append(setData)
+    if color_num == -1:
+        for col_name in collection_names:
+            if col_name == "setlist":
+                continue
+            currentSet = LegoSets[col_name]
+            for piece in currentSet.find():
+                if part_num == piece['part_num']:
+                    if piece['quantity'] > piece['obtained_pieces']:
+                        setData = setList.find_one({'_id': int(col_name)})
+                        setData['quantity'] = piece['quantity']
+                        setData['obtained_pieces'] = piece['obtained_pieces']
+                        setData['color'] = piece['color']
+                        retSets.append(setData)
+    else:
+        color = rebrick.lego.get_color(color_num)
+        parsedColor = json.loads(color.read())['name']
+        for col_name in collection_names:
+            if col_name == "setlist":
+                continue
+            currentSet = LegoSets[col_name]
+            for piece in currentSet.find():
+                if part_num == piece['part_num'] and parsedColor == piece['color']:
+                    if piece['quantity'] > piece['obtained_pieces']:
+                        setData = setList.find_one({'_id': int(col_name)})
+                        setData['quantity'] = piece['quantity']
+                        setData['obtained_pieces'] = piece['obtained_pieces']
+                        setData['color'] = piece['color']
+                        retSets.append(setData)
     return retSets
 
 # Check to see if part is unique to a set
-def search_potentialsets(part_num):
+def search_potentialsets(part_num, color_num):
     sets = rebrick.lego.get_part_color_sets
 
 # Add piece to db if found

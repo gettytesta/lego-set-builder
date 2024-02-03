@@ -81,13 +81,20 @@ class SetBuilder extends React.Component {
             <div className='colorMenuTop'>
               <Select className='colorMenu' onChange={this.handleChange} options={colors}/>
             </div>
+
             {this.state.searchedPart.length === 0 ? <p>Enter a Lego part number to start.</p> : <></>}
             {this.state.noRes ? <p>No results...</p> : <></>}
             {this.state.pieceSuccess ? <p>Piece successfully added!</p> : <></>}
+
             <ul className='pieceList'>
               {this.state.setList.map(set => {
-                return <li><a href='#' onClick={() => {this.addPiece(this.state.searchedPart, set._id)}}>{set.set_name}</a>
-                {": " + set._id + " ----- Total: " + set.quantity + " ----- Collected: " + set.obtained_pieces}</li>
+                // return <li><a href='#' onClick={() => {this.addPiece(this.state.searchedPart, set._id)}}>{set.set_name}</a>
+                // {": " + set._id + " ----- Color: " + set.color + " ----- Total: " + set.quantity + " ----- Collected: " + set.obtained_pieces}</li>
+                return <li> 
+                  <a href='#' className='pieceIndiv' onClick={() => {this.addPiece(this.state.searchedPart, set._id)}}>{set.set_name}</a>
+                  <label>{": " + set._id + " ----- Color: " + set.color}</label>
+                  <p className='pieceIndiv2'>Total: {set.quantity} ----- Collected: {set.obtained_pieces}</p>
+                </li>
               })}
             </ul>
         </>

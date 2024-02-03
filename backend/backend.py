@@ -46,9 +46,10 @@ def get_potsets():
 @app.route('/api/check_piece', methods=['POST'])
 def check_piece():
     part_num = request.json['part_num']
-    setList = builder.search_sets_for_piece(part_num)
-    if len(setList) == 0:
-        builder.search_potentialsets(part_num)
+    color_num = request.json['color']
+    setList = builder.search_sets_for_piece(part_num, color_num)
+    if len(setList) == 0 and color_num != -1:
+        builder.search_potentialsets(part_num, color_num)
     return setList
 
 # Adds a part to a users set
