@@ -6,9 +6,7 @@ import json
 
 
 REBRICK_KEY = os.getenv('REBRICK_KEY')
-REBRICK_KEY = "1eece07086fadf00e97b797f1289bd34"
 MONGO_CONNECTION_STRING = os.getenv('MONGO_CONNECTION_STRING')
-MONGO_CONNECTION_STRING = "mongodb+srv://GTestaMoney:NvoW1dGD9BdxUE14@legosets.8lnejno.mongodb.net/?retryWrites=true&w=majority"
 
 def get_database():
    client = MongoClient(MONGO_CONNECTION_STRING)
