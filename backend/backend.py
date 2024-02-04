@@ -49,7 +49,8 @@ def check_piece():
     color_num = request.json['color']
     setList = builder.search_sets_for_piece(part_num, color_num)
     if len(setList) == 0 and color_num != -1:
-        builder.search_potentialsets(part_num, color_num)
+        set = builder.search_potentialsets(part_num, color_num)
+        return set
     return setList
 
 # Adds a part to a users set
@@ -57,8 +58,16 @@ def check_piece():
 def found_piece():
     part_num = request.json['part_num']
     set_num = request.json['set_num']
-    builder.found_piece(part_num, set_num)
+    color = request.json['color']
+    builder.found_piece(part_num, set_num, color)
     return "Piece added"
+
+# Adds a part to a users set
+@app.route('/api/found_set', methods=['POST'])
+def found_set():
+    set_num = request.json['set_num']
+    builder.add_set(set_num)
+    return "Set added"
 
 if __name__ == "__main__":
     app.run(debug=True)

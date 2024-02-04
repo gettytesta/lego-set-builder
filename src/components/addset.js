@@ -7,23 +7,15 @@ class AddSet extends React.Component {
     super(props)
     this.state = {
         textValue: "",
-        potentialSets: [],
         setSearch: {},
         searchedYet: false,
+        addedSet: false,
     }
 
     this.textChange = this.textChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.search = this.search.bind(this)
-  }
-
-  componentDidMount() {
-    axios.get('http://127.0.0.1:5000/api/user/potentialsets').then(res => {
-      this.setState({
-        potentialSets: res.data,
-        setSearch: {},
-      })
-    })
+    this.addSet = this.addSet.bind(this)
   }
 
   textChange = (event) => {
@@ -34,6 +26,9 @@ class AddSet extends React.Component {
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
+        this.setState({
+            addedSet: false
+        })
         this.search(this.state.textValue); 
     }
   }
@@ -49,23 +44,28 @@ class AddSet extends React.Component {
       }
   }
 
+  addSet = (set) => {
+    axios.post('http://127.0.0.1:5000/api/found_set', {'set_num': set.set_num}).then((res) => {
+      this.setState({
+        setSearch: {},
+        searchedYet: true,
+        addedSet: true,
+      })
+    })
+  }
+
   render() {
     return (
         <>
             <input id='legoSearchBrick' className='legoSearch' placeholder='Enter a set' onChange={this.textChange}
                     onKeyUp={this.handleKeyPress}></input>
             {Object.keys(this.state.setSearch).length === 0 ? <></> : <ul className='pieceList'>
-                <li><a href='#' onClick={() => {}}>{this.state.setSearch.name}</a>
+                <li><a href='#' onClick={() => {this.addSet(this.state.setSearch)}}>{this.state.setSearch.name}</a>
                   : {this.state.setSearch.set_num} ----- Year: {this.state.setSearch.year} ----- Total parts: {this.state.setSearch.num_parts}</li>
             </ul>} 
             {this.state.searchedYet ? <></> : <p>Enter a set number to start.</p>}
-            {Object.keys(this.state.setSearch).length === 0 && this.state.searchedYet ? <p>No results...</p> : <></>} 
-
-            <ul className='pieceList'>
-                {this.state.potentialSets.map((set) => {
-                    return <li></li>
-                })}
-            </ul>
+            {Object.keys(this.state.setSearch).length === 0 && this.state.searchedYet && !this.state.addedSet ? <p>No results...</p> : <></>} 
+            {this.state.addedSet ? <p>Set successfully added to setlist!</p> : <></>}
         </>  
     );
   }

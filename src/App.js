@@ -52,7 +52,9 @@ class App extends React.Component {
       <div className="main">
         <header className="body">
           <td className='header'>
-            <h1>Lego Set Rebuilder V1.0</h1>
+            <div>
+              <h1>Lego Set Rebuilder V1.0</h1>            
+            </div>
             <button className='menuButton' onClick={this.open_SetBuilder}>Build Sets</button>
             <button className='menuButton' onClick={this.open_SetList}>Check Setlist</button>
             <button className='menuButton' onClick={this.open_AddSet}>Add Sets</button>

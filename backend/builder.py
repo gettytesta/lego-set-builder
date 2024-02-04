@@ -68,12 +68,27 @@ def search_sets_for_piece(part_num, color_num):
 
 # Check to see if part is unique to a set
 def search_potentialsets(part_num, color_num):
-    sets = rebrick.lego.get_part_color_sets
+    try:
+        sets = rebrick.lego.get_part_color_sets(part_num, color_num)
+        parsedSets = json.loads(sets.read())
+        if parsedSets['count'] == 1:
+            print(parsedSets)
+            set = setList.find_one({'set_name': parsedSets['results'][0]['name']})
+            if set == None:
+                return parsedSets['results'][0]
+        return []
+    except HTTPError as err:
+        if err.code == 404:
+            return []
+    
 
 # Add piece to db if found
-def found_piece(id, set):
+def found_piece(id, set, color):
     currentSet = LegoSets[str(set)]
-    currentSet.update_one({'part_num': id}, {'$inc': {'obtained_pieces': 1}})
+    pieces = currentSet.find({'part_num': id})
+    for piece in pieces:
+        if piece['color'] == color:
+            currentSet.find_one_and_update({'_id': piece['_id']}, {'$inc': {'obtained_pieces': 1}})
     setList.find_one_and_update({'_id': set}, {'$inc': {'collected_pieces': 1}})
     return
 
@@ -96,6 +111,7 @@ def get_potentialsets():
 
 # Add a set into the db
 def add_set(set):
+    set = set.split("-")[0]
     setCluster = LegoSets[str(set)]
     parts = rebrick.lego.get_set_elements(set)
     parsedParts = json.loads(parts.read())['results']
@@ -103,6 +119,11 @@ def add_set(set):
         #setCluster.update_one({'_id': part['id']}, {'$set': {'_id': part['part']['part_num']}})
         setCluster.insert_one({'_id': part['id'], 'part_num': part['part']['part_num'], 'name': part['part']['name'],'color': part['color']['name']
                                 , 'quantity': part['quantity'], 'obtained_pieces': 0})
+    setData = rebrick.lego.get_set(set)
+    parsedSet = json.loads(setData.read())
+    setList.insert_one({'_id': int(parsedSet['set_num'].split("-")[0]), 'set_name': parsedSet['name'], 'collected_pieces': 0,
+                        'num_parts': parsedSet['num_parts']})
+    return "Set added."
         
 # Remove a set in the db
 def remove_set(set):
